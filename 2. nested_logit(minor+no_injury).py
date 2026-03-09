@@ -223,7 +223,7 @@ ape_fd = pd.DataFrame(ape_rows) if ape_rows else pd.DataFrame(columns=["quantity
 ape_all = pd.concat([ape_deriv, ape_fd], ignore_index=True)
 ape_all.to_csv(os.path.join(OUT_DIR, "marginal_effects_APE.csv"), index=False)
 
-print("✅ 完成，结果保存在：", os.path.abspath(OUT_DIR))
+print("结果保存在：", os.path.abspath(OUT_DIR))
 print("\n[分类变量基类（众数）记录]")
 for k, v in cat_base.items():
     print(f"  {k}: base={v}")
