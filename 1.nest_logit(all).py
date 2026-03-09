@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-#这个代码主要是将不同的事故严重程度分类进行嵌套逻辑回归分析。
-# 事故严重程度被分为四个类别：死亡、轻伤、无伤和住院。
-# 为了便于建模，代码将这些类别重新编码为1到4的数字。
-# 然后，代码定义了几种可能的嵌套结构，以便比较哪种结构最适合数据。
-# 最后，代码使用Biogeme库来执行嵌套逻辑回归分析，并输出结果。
+
 """
 Nested Logit for 4 categories, grav coded as:
 0 = 死亡, 1 = 轻伤, 2 = 无伤, 3 = 住院
@@ -27,11 +22,11 @@ import biogeme.biogeme as bio
 from biogeme import models
 from biogeme.expressions import Beta, Variable
 
-# ---------------- 配置 ----------------
-FILE_PATH = "cleaned_data_final.csv"   # 改成你的文件名
+
+FILE_PATH = "cleaned_data_final.csv"   
 OUT_DIR   = "nested_logit_4alts_batch"
-SAMPLE_N  = None        # None=全量；否则给定抽样条数
-DEFAULT_AV = True       # 没有真实可用性列时，统一设为1
+SAMPLE_N  = None        
+DEFAULT_AV = True   
 # -------------------------------------
 
 
@@ -48,13 +43,13 @@ def load_and_prepare():
     recode_map = {2: 1, 0: 2, 3: 3, 1: 4}
     df["grav_int"] = df["grav"].map(recode_map).astype(int)
 
-    # 抽样（可选）
+    # 抽样
     if SAMPLE_N is not None and len(df) > SAMPLE_N:
         df = df.sample(n=SAMPLE_N, random_state=42).reset_index(drop=True)
     else:
         df = df.reset_index(drop=True)
 
-    # 可用性列（如你有真实列请替换）
+ 
     if DEFAULT_AV:
         df["Av1"] = 1  # 无伤
         df["Av2"] = 1  # 死亡
@@ -65,7 +60,6 @@ def load_and_prepare():
 
 
 def fit_nested(df, model_name, nests_spec):
-    """仅用截距；以 '死亡'(内部编号=2) 为基准（ASC_Fatal=0）"""
     os.makedirs(OUT_DIR, exist_ok=True)
     database = db.Database(model_name, df)
 
@@ -131,7 +125,6 @@ def main():
     print("\n[INFO] grav_int(1=无伤,2=死亡,3=住院,4=轻伤) 分布：")
     print(df["grav_int"].value_counts().sort_index())
 
-    # 内部编号：1=无伤, 2=死亡, 3=住院, 4=轻伤
 
     # S1：{无伤, 轻伤} / {住院, 死亡}
     MU_Light  = Beta("MU_Light",  0.8, 1e-3, 0.999, 0)
