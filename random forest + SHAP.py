@@ -91,11 +91,11 @@ try:
 except Exception:
     X_bg = X_train
 
-# 9) 构建 explainer（interventional 避免报错）
+# 9) 构建 explainer
 explainer = shap.TreeExplainer(
     model,
     data=X_bg,
-    feature_perturbation="interventional",  # ✅ 避免报错
+    feature_perturbation="interventional",  
     model_output="raw"
 )
 
